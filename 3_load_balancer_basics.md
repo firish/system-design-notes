@@ -1,51 +1,37 @@
-# Scalability in System Design
+# Load Balancing
 
-Scalability in system design refers to the ability of a system, network, or process to handle a growing amount of work or its potential to be enlarged in order to accommodate that growth. Essentially, if a system is scalable, it should be able to perform effectively even as it experiences an increased volume of users, transactions, data, or events.
+Load balancing is a technique used in computing to distribute workloads uniformly across multiple servers or other resources to optimize resource usage, reduce latency, and ensure that no single server is overwhelmed with too much demand. This helps improve responsiveness and availability of applications, websites, databases, and other IT services.
 
-## Horizontal Scaling
+There are several methods used for load balancing, including:
 
-Also known as scaling out, is the process of adding more machines or nodes to a system to increase its overall capacity. It involves spreading the load across multiple servers or instances, rather than just upgrading the capabilities of a single machine. This is a common approach used in distributed systems, such as cloud computing and data centers.
+- **Round Robin:** This simple method involves distributing requests sequentially to servers in a list. When the end of the list is reached, the load balancer starts again at the top.
 
-### Pros
+- **Least Connections:** This method directs new requests to the server that is currently handling the fewest active connections.
 
-1. **Improved Performance:** By distributing the load across multiple servers, horizontal scaling can help to prevent any single server from becoming a bottleneck and improve the system's ability to handle larger loads.
+- **IP Hash:** This method uses the client's IP address to determine which server to direct the request to. This can help ensure that a client always connects to the same server.
 
-2. **Increased Redundancy:** Horizontal scaling can also improve the reliability and availability of a system. If one server goes down, the load can be redistributed among the remaining servers.
+- **Least Time:** This method combines both the shortest queue length and the fastest server response time to direct traffic.
 
-3. **Flexibility:** With horizontal scaling, it's easier to scale the system in smaller increments by simply adding more servers as needed, making it a more flexible option for managing the changes in demand.
+## Hashing
 
-4. **Cost-Effective:** In many cases, it can be more cost-effective to add more lower-cost servers than to invest in higher-cost, high-powered servers.
+Hashing is a technique used in computer science to convert a large amount of data into a smaller fixed size. It is primarily used to facilitate rapid data lookup and access in data structures such as hash tables. A 'hash function' performs the operation to convert the input data into a smaller fixed size, often referred to as a hash code.
 
-### Cons
+## Load on Servers
 
-1. **Complexity:** Horizontal scaling can add complexity to system management and application architecture. The system must be able to distribute the load evenly across servers, and the application must be designed to support distributed processing.
+In the context of load balancing and servers, the "load" refers to the amount of computational work that a server is currently performing. This can be measured in various ways, such as the number of active connections, CPU usage, memory usage, network bandwidth, or a combination of these and other factors.
 
-2. **Data Consistency:** In a distributed system, ensuring data consistency can be challenging. If data is updated on one server, the changes need to be propagated to the other servers quickly to avoid data inconsistencies.
+## Load Factors
 
-3. **Network Latency:** Horizontal scaling involves more inter-server communication, which can introduce latency and impact the performance of the system.
+In the context of a hash table, the load factor is a measure that determines when to resize the table. It's calculated as the number of entries in the hash table divided by the number of slots or buckets. 
 
-4. **Software Licensing Costs:** Some software licensing models charge per server or per core, which could potentially make horizontal scaling more expensive, depending on the specific licensing agreements.
+## Uneven Distribution
 
-## Vertical Scaling
+Uneven distribution occurs when a hash function does not distribute data uniformly across the range of possible hash values. This can lead to certain servers receiving more requests than others, which is undesirable in a load balancing scenario because it defeats the purpose of evenly distributing the load to optimize resource utilization.
 
-Also known as scaling up, is the process of increasing the capacity of a single server or system by adding more resources, such as CPU, RAM, or storage. This approach seeks to make a machine more powerful to handle increased load or demand.
+## Adding More Servers
 
-### Pros
+When you add more servers to your server pool, the distribution of load needs to be recalculated. With a simple hash function, adding a new server often requires rehashing and redistributing all the existing data, which can be computationally expensive and disruptive to a system in operation. Plus, if all requests are mapped to different servers suddenly, all the useful information cache is suddenly a waste.
 
-1. **Simplicity:** Vertical scaling is conceptually simpler than horizontal scaling. You don't need to manage multiple servers or worry about distributed data processing or network configuration between nodes. You just upgrade a single server.
+## Consistent Hashing
 
-2. **Performance:** Vertical scaling can lead to improved performance for certain applications. With more resources (like CPU or memory), applications can process data faster. Moreover, all the data resides on a single machine, so there's no need for inter-server communication, which can introduce latency.
-
-3. **Data Consistency:** In a vertically scaled system, since the data resides in one place, it's easier to manage data consistency. There's no need to worry about replicating data or keeping it in sync across multiple servers.
-
-### Cons
-
-1. **Hardware Limitations:** There are physical limits to how much you can scale a single server. You can only add so much CPU, memory, or storage to a machine before reaching the limit.
-
-2. **Downtime:** To add more resources to a server, you often need to take the server offline, which can lead to downtime. This can be mitigated with careful planning and during periods of lower demand, but it's still a potential risk.
-
-3. **Cost:** Adding high-end hardware to a single machine can be expensive. The cost performance ratio often decreases as you reach the upper limits of server specifications.
-
-4. **Single Point of Failure:** If the single, powerful server goes down, everything stops working. Redundancy is more of a challenge with vertical scaling since it requires duplicating a high-end system.
-
-5. **Scalability Limitations:** Vertical scaling can only go so far. Once you reach the limits of how much you can scale a server, you'll need to consider other options, such as horizontal scaling or distributing your application in another way.
+Consistent hashing is a strategy that's often used to mitigate these issues. With consistent hashing, when a new server is added, only a small fraction of keys get remapped, minimizing disruption and load spikes. Similarly, when a server is removed, its load is smoothly redistributed among the remaining servers.
