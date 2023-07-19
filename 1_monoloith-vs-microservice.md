@@ -1,3 +1,5 @@
+Review Link: https://interviewready.io/learn/system-design-course/basics/monoliths_vs_microservices
+
 # Monolith Architecture
 
 Monolith architecture refers to a software development model where all the software components of an application are interconnected and interdependent. In a monolith, the software is a single, indivisible unit, which can make the development, deployment, scaling, and debugging processes vastly different than they would be in a microservices architecture.
