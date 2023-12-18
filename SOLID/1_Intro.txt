@@ -1,0 +1,8 @@
+# This is a follow-along of Gaurav Sen's tutorial on design practices 
+# The main agenda is 
+# A. Introduction to LLD
+# B. In-dept learning about SOLID philosophy
+# C. Introduction to some mainstream design patterns
+
+# Design practices are design philosophies like OOPS, SOLID, DRY, KISS, Occams Razor
+# Design patterns are templates like singleton, factory, chain-of-responsibility
