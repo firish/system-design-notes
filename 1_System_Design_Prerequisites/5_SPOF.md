@@ -4,7 +4,7 @@ A single point of failure(SPOF) in computing is a critical point in the system w
 
 Single points of failure often pop up when setting up coordinators and proxies. These services help distribute load and discover services as they come and leave the system. Because of the critical centralized tasks of these services, they are more prone to being SPOFs.
 
-There are two simple ways of eliminating SPOF. One way to mitigate the problem is to use multiple instances of every component in the service. The graph of dependencies then becomes more flexible, allowing the system to resiliently switch to another service instead of failing requests. Another approach is to have backups that allow a quick switchover on failure. The backups are useful in components dealing with data, like databases.
+There are two simple ways of eliminating SPOF. One way to mitigate the problem is to use multiple instances of every component in the service. The graph of dependencies then becomes more flexible, allowing the system to resiliently switch to another service instead of failing requests. Another approach is to have backups that allow a quick switchover on failure. The backups are useful in components dealing with data, like databases. This is also called a master-slave database, in a sense that the master is the active db and the operations on it are mirrored to the slave, that is only used if the master is down.
 
 Once all SPOF are taken care of, you can think of distributed components, like distributed data storage, or distributed storage, separated by geographic regions, so a disaster like fire, electricity cut, or a network drop in a physical area does not hamstring your system.
 
