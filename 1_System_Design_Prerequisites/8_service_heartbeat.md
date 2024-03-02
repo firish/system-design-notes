@@ -16,27 +16,27 @@ This cycle repeats every 5s
 If a server respons late, or doesn't respond to the poll, the service may change the status of the server to something like 'overloaded'
 If the server misses multiple polls (2-3), it can be marked as critical
 and if it misses another poll, it is marked as dead.
+
 At this point the heartbeat service will inform this to the load balancer, so more requests aren't routed to the dead server
 The service heartbeat can also be responsible for sending a message to another service that is responsible for restarting the server
 
 # A 2-way heartbeat
-Sometimes the server may be alive
-But the service running on the server may be dead
+Sometimes the server may be alive but the service running on the server may be dead
 This can not be detected properly by the heartbeat service
 so we use a 2-way heartbeat
+
 In this, the heartbeat service polls the sever every 5 seconds (expecting a response from the server)
 and the service on the server polls/sends a message (without expecting a response) to the heartbeat service
-with this the heartbeat service can be sure that both the server and the service on it are up and running
+with this the heartbeat service can be sure that both the server and the service on it are up and running.
+
 However, this method increases complexity and adds up communication (data transfer overhead)
 (Most cloud platforms also charge a data transfer fee, which is very low, but can build up fast if we have such a service running for hundreds of servers)
 
 # Zombie servers
 When a server is alive, but the service running on it is dead, the server is called a Zombie
 This is a very big problem
+
 Servers typically have cron jobs running on them
 These cron jobs may talk to other servers and influence data on them
 However, since the service on a zombie is dead, the zombie has stale data and its cron jobs can mess the entire systems data management
 A two-way heartbeat service can help reduce the risk of zombie servers
-
-Service Discovery is another important part of deploying and maintaining systems. 
-The load balancer is able to adapt request routing. Both features allow the system to report and heal issues efficiently.
