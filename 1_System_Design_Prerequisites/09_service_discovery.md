@@ -25,7 +25,7 @@ Now, every time a server in service C needs to talk to a server in service A,
 they can simply poll the load balancer for the IP address and the port (service discovery)
 
 # How does the load-balancer know when to update itself
-The load balancer is regularly updated using heartbeats. Every service will send a snapshot hash in each heartbeat. Every time a server is added or removed or marked dead by the heartbeat service, there will be a hash mismatch, and the load balancer discards the earlier snapshot of the service and take/request a new snapshot.
+The load balancer is regularly updated using heartbeats. Every service will send a snapshot hash in each heartbeat. Every time a server is added or removed or marked dead by the heartbeat service, there will be a hash mismatch, and the load balancer discards the earlier snapshot of the service and takes/request a new snapshot.
 Now when other servers query the load balancer, they get the updated snapshot
 
 
