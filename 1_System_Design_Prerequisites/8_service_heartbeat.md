@@ -40,3 +40,12 @@ Servers typically have cron jobs running on them
 These cron jobs may talk to other servers and influence data on them
 However, since the service on a zombie is dead, the zombie has stale data and its cron jobs can mess the entire systems data management
 A two-way heartbeat service can help reduce the risk of zombie servers
+
+# what if the health service goes down?
+The health services are lightweight and made fault tolerant (by replication), making this unlikely. However, there is a possibility of any service going down. In that case, we try to bring it back as soon as possible.
+
+
+# Extra relevant information
+In Kubernetes this is implemented as a liveliness check where Kubernetes service queries each pod or each pod sends its liveness rule result back to Kubernetes and the replica set/deployment object could restart these pods that have dead service.
+
+In Kafka, I think consumer groups have 2-way heartbeat mechanisms where group coordinators and consumer threads send heartbeat signals. So, Kafka heartbeat interval.ms is generally 1/3rd of session timeout and if no heartbeat signal is received by the co-ordinator till the end of the session timeout, the consumer instance is replaced. 
