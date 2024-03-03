@@ -56,5 +56,7 @@ The ANS will look up the IP address assigned to yahoo.com and return the IP addr
 The ISP returns the IP address to the browser, which can then fetch yahoo.com's webpage. 
 
 The top-to-end DNS graph looks like this,
+
 local browser -> ISP -> DNS root server -> ISP -> TLD server -> ISP -> ANS -> ISP -> local browser.
+
 The entire process can be long, and introduce latency, hence, the ISP and the local browser both maintain a cache system to minimize traversing the entire DNS graph. 
