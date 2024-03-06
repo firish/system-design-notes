@@ -75,15 +75,3 @@ However, being off by 3 or more orders of magnitude is too much.
 We can then highlight the following:
 Where our assumption was wrong, or
 Which factor we didn't take into account.
-
-Eg: Estimate the number of petrol pumps in the city of Mumbai.
-
-
-
-
-
-
-
-
-
-
