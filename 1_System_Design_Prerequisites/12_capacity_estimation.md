@@ -75,3 +75,23 @@ However, being off by 3 or more orders of magnitude is too much.
 We can then highlight the following:
 Where our assumption was wrong, or
 Which factor we didn't take into account.
+
+
+# Numbers everyone should know for capacity estimation
+
+For making the above capacity estimation, use the following reference numbers, 
+(hour-> minute -> second -> millisecond -> microsecond -> nanosecond -> picosecond -> femtosecond -> attosecond -> zeptosecond -> yoctoseond (FAZY)
+
+1. L1 cache reference -> 500 ps, 0.5 ns
+2. Branch mispredict -> 5000 ps, 5 ns
+3. L2 cache reference -> 7000 ps, 7 ns
+4. Lock/Unlock -> 100 ns
+5. Main memory reference -> 100 ns
+6. Compressing 1KB -> 10000 ns, or 10 us (microsecond)
+7. Transmit 2KB over 1 GBPS network -> 20000 ns, 20 us
+8. Read 1 MB from memory sequentially -> 250,000 ns, 0.25 ms
+9. Round trip within same data center -> 500,000 ns, 0.5 ms
+10. Disk seek -> 10,000,000 ns, 10 ms
+11. Read 1MB from the network sequentially -> 10,000,000 ns, 10 ms
+12. Read 1MB from the disk sequentially -> 30,000,000 ns, 30 ms
+13. Send packet between countries -> 150,000,000 ns, 0.15 s
