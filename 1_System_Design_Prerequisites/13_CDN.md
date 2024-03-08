@@ -46,3 +46,14 @@ So, we can use leverage a pre-build CDN service, like Akamai, or AWS CDN.
 These services manages the servers/caches automatically, by hosting them closer to the users,
 updating periodiaclly, and managing data regulations. 
 
+
+# Extra info
+when the user of a country let's say India makes a request, to what exactly will he be making a request? How do we know which CDN box we have to hit? We have the user's location but who determines the routing? Will there be an intermediate gateway or something like that in each country?
+
+Well, there can be two ways the client gets routed to the CDN. 
+First, when the client sends the request, it is sent to the server. 
+After the first request, the client gets the address of the CDN from the server. 
+
+Second, the ISP can map the domain to the IP Address of the nearest CDN. So when a client sends a request, he/she is first redirected to the CDN
+
+
