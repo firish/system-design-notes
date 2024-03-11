@@ -9,6 +9,7 @@ Note: API is not supposed to explain how your system (code/codebase) works.
 It is supposed to explain how users interact with the system.
 Hence, it serves as an "interface" to your codebase.
 
+# Good API Design Practices
 When designing an API, keep in mind,
 1. What will the API be called? (Name it properly)
 2. What input parameters will it expect? (along with their data types)
@@ -30,3 +31,4 @@ You could define custom errors for every small thing, like invalid input param, 
 Or, you may send a generic error for all of these problems.
 It is best to define a custom error message for subtle mistakes (like the object you are querying for was deleted) or more frequent mistakes.
 
+# Practical API Design Coniderations
