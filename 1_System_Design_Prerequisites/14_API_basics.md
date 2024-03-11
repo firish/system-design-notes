@@ -23,9 +23,9 @@ Also, the API should only return what is expected (acc. to API name)
 Many times people return multiple parameters thinking it is good to return excess information as it was already fetched.
 However, this is a bad practice as:
 
-a. It requires more bandwidth to transfer this data, so it could put stress on the network if the API is hit millions of times.
-b. If the API is hosted on a cloud gateway, you most likely have to pay a data transfer fee, and this will increase your fee.
-c. If these are not internal microservices, and you are charging a client per call, you may want to charge for the extra data you are returning in free.
+1. It requires more bandwidth to transfer this data, so it could put stress on the network if the API is hit millions of times.
+2. If the API is hosted on a cloud gateway, you most likely have to pay a data transfer fee, and this will increase your fee.
+3. If these are not internal microservices, and you are charging a client per call, you may want to charge for the extra data you are returning in free.
 
 The last important consideration is finding a balance about how many errors you want to define
 You could define custom errors for every small thing, like invalid input param, wrong data type input param, unexpected input param value, etc.
