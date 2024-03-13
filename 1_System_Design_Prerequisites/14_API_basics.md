@@ -56,8 +56,16 @@ This will keep cascading.
 This is not a good practice.
 Your setAdmin API should only make someone the admin. There should be no "side effects". 
 
-Another problem with Side Effects is that you risk losing the "Atomocity". Let's say you were doing everything in one API, and you create a group, but due to wrong parameters, logical error, network error, database error, or any random error, your API fails without setting admins, the group will already have been created. 
+Another problem with Side Effects is that you risk losing the "Atomocity". 
+Atomicity means that either all the actions within an API call succeed, or none of them succeed.
+Let's say you were doing everything in one API, and you create a group, but due to wrong parameters, logical error, network error, database error, or any random error, your API fails without setting admins, the group will already have been created. 
 Now, if you were doing 4 things in the API and it fails midway, you don't have atomicity in the API. 
+
+Another practical example of this.
+While creating a group with 10 users, assume that the 4th user membership query fails.
+Should we create a group with 3 users, and return a partial success response to the client? 
+Or could this break the product requirement (What if user 4 is an admin, and now this group exists without any admin?)
+Having atomic APIs helps keep the system simple and clean.
 
 
 
