@@ -5,6 +5,12 @@ Message processing in an asynchronous fashion allows the client to relieve itsel
 hence, can do other jobs during that time. 
 It also allows a server to process its jobs in the order it wants to.
 
+(Better worded explanation)
+Message Queues are designed to facilitate this kind of parallel execution.
+Instead of executing the tasks right away, MQ queues up the tasks it receives therefore decoupling publisher from subscriber. 
+The publisher does not wait for the task to be completed and continues with its execution knowing that the task will be executed in due course of time. 
+The subscriber receives the tasks one by one based on its processing capacity. The key here is both publisher and subscriber are working at the same time, the publisher on its main task with the subscriber executing its assigned sub-task.
+
 It means that once the client sends a request, the server can send just a response "Okay".
 Then add the query in the messaging queue along with other queries, and process them using any custom scheduling algorithm.
 Once a clients query is processed, the actual response is then sent back to the client.
