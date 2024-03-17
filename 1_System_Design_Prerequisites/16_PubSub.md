@@ -81,8 +81,15 @@ This decoupling allows the system to scale horizontally with ease.
 As the number of messages or the volume of data increases, you can add more publishers or subscribers to handle the load without significant changes to the system architecture or needing extensive coordination between components.
 Additionally, the message broker or queue in the middle can manage load balancing and ensure messages are evenly distributed among subscribers, enhancing the system's overall fault tolerance and reliability.
 
-5. Offers a loose consistency guarantee. 
+## 5. Offers a loose consistency guarantee. 
+The term "loose consistency" generally refers to the idea that all nodes in a distributed system will eventually become consistent but do not necessarily need to be consistent at all times.
 
+In a REST architecture, if a server (e.g., S3) crashes during a request chain (S1 → S2 → S3), the ongoing request might be lost if not properly handled, and state consistency can be compromised unless there are mechanisms in place to retry or recover the transaction.
+In an MQ system, messages are typically persisted in the queue. 
+If a consumer (like S3) fails while processing a message, the MQ can retain the message and deliver it again when the consumer is back online. This persistence ensures that messages are not lost due to server crashes, enhancing fault tolerance and providing a form of consistency guarantee.
+
+At-Least-Once Delivery:
+Many MQ systems support "at-least-once delivery," meaning that messages are guaranteed to be delivered at least once to a consumer. If a consumer fails to process a message (due to crashing or other issues), the MQ system can redeliver the message, ensuring that the processing attempt is made again, which contributes to system consistency.
 
 Main Disadvantages:
 1. Can not be used in systems requiring strong consistency of data
