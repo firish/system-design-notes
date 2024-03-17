@@ -45,7 +45,7 @@ This DLQ can then be monitored, and notifications can be sent directly to the cl
 This setup can significantly reduce the time it takes for a failure to be communicated back to the client.
 The benefit is even greater in systems where the calling hierarchy has many levels. 
 
-# 3. Ease of Interaction logic.
+## 3. Ease of Interaction logic.
 
 Interaction Logic:
 In a REST architecture, interaction logic is often embedded within each service, which can lead to complex interdependencies and make the system harder to manage and scale.
@@ -91,8 +91,34 @@ If a consumer (like S3) fails while processing a message, the MQ can retain the 
 At-Least-Once Delivery:
 Many MQ systems support "at-least-once delivery," meaning that messages are guaranteed to be delivered at least once to a consumer. If a consumer fails to process a message (due to crashing or other issues), the MQ system can redeliver the message, ensuring that the processing attempt is made again, which contributes to system consistency.
 
-Main Disadvantages:
-1. Can not be used in systems requiring strong consistency of data
+
+# Main Disadvantages:
+
+## 1. Can not be used in systems requiring strong consistency of data
+Let's say you have a banking service.
+There are 3 microservices, S0, S1, and S2. 
+S0 is a payment gateway, S1 is a bank commission calculator, and S2 is a fund transfer.
+A has 1000 in his account. B has 0. The Bank commission is 50 flat.
+A makes a request to S0 for transferring 950 into B.
+A makes a second request to S0 for transferring 800 into C.
+After the transaction, A should have 0, B should have 950, and Bank should be +50. (1st transaction executes)
+(The second transaction fails due to insufficient funds).
+Now, S0 sends the message in MQ of S1 and S2.
+S1 takes the message and charges a fee of 50. A now has 950, and Bank has +50.
+S2 has a high load, is experiencing downtime, or has crashed. 
+So, the request to transfer stays in MQ.
+The second transaction is called by A.
+S0 calls S1 and S2 again by placing the request on the respective MQ.
+S1 sees that there is 950 in A and transactions for 800 can go through.
+Now, A has 900, and the Bank has +100.
+Now S2 is up.
+The first request of 950 comes, and fails as A only has 900. 
+The second request of 800 comes and executes.
+After the sequence, A has 100, B has 0, C has 800, and Bank has +100.
+This is different than what should have happened.
+Hence, when we decouple services, consistency of data always takes a hit.
+We can avoid some of this with good design practices, but still, consistency is never perfect, as there is no 100% atomicity of transactions.
+
 2. An extra layer of interaction slows services
 3. Additional cost to the team for redesigning, learning, and maintaining the message queues.
 
