@@ -45,10 +45,44 @@ This DLQ can then be monitored, and notifications can be sent directly to the cl
 This setup can significantly reduce the time it takes for a failure to be communicated back to the client.
 The benefit is even greater in systems where the calling hierarchy has many levels. 
 
- 
-4. Easily add subscribers and publishers without informing the other.
-5. Converts multiple points of failure to a single point of failure.
-6. Interaction logic can be moved to services/message broker.
+# 3. Ease of Interaction logic.
+
+Interaction Logic:
+In a REST architecture, interaction logic is often embedded within each service, which can lead to complex interdependencies and make the system harder to manage and scale.
+In a Pub-Sub model, the interaction logic can be somewhat decoupled from the services themselves. 
+The services publish and subscribe to messages without needing to know the details of other service implementations. 
+This decoupling simplifies the interaction logic.
+
+Failure Points:
+Shifting to a Pub-Sub model can help in identifying and isolating failures because it centralizes message handling. 
+While it can simplify the debugging process because there's a central place where message flows can be monitored, it also introduces a critical dependency on the message broker itself. 
+If the MQ becomes a single point of failure, then its reliability becomes crucial for the entire system's stability.
+
+To avoid this, Messaging services encapsulate load balancers, health services, etc. 
+Hence chances of failure are low.
+However, the MQ is a software application, and similar to any other backend server application, it can still fail.
+To make them fail-proof, we can make them highly available across single or multiple regions(Disaster recovery). 
+For a single region, high availability is achieved by deploying to multiple zones in a clustered environment with messages duplicated across brokers. 
+
+## 4. Easily add subscribers and publishers without informing (Improving Scalability).
+In a Pub-Sub (Publish-Subscribe) model, scalability is enhanced because you can add new publishers or subscribers without needing to inform or modify the existing components of the system.
+
+In the Pub-Sub model, publishers and subscribers are decoupled. 
+That is, they do not have direct knowledge of each other. 
+Publishers send messages to a message queue or broker, and subscribers listen for messages they are interested in, without knowing who the original publisher is.
+Subscribers can dynamically subscribe to topics or message queues of interest. 
+When a new subscriber is added, it simply registers its interest with the message broker. 
+There is no need to change the publisher’s code or configuration, as the publisher continues to send messages to the same queue.
+
+Similarly, new publishers can start sending messages to a queue without affecting existing subscribers. 
+As long as the messages conform to the expected format, existing subscribers can process them, enabling seamless scalability.
+
+This decoupling allows the system to scale horizontally with ease. 
+As the number of messages or the volume of data increases, you can add more publishers or subscribers to handle the load without significant changes to the system architecture or needing extensive coordination between components.
+Additionally, the message broker or queue in the middle can manage load balancing and ensure messages are evenly distributed among subscribers, enhancing the system's overall fault tolerance and reliability.
+
+5. Offers a loose consistency guarantee. 
+
 
 Main Disadvantages:
 1. Can not be used in systems requiring strong consistency of data
