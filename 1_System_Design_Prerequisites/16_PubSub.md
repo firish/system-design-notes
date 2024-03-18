@@ -146,9 +146,13 @@ Here's a comparison of the two models:
 
 ## Push-Based Model
 Initiation: In a push-based model, the server (or broker) takes the initiative to send messages to the client (or consumer) as soon as they become available.
+
 Control: The control over the message flow lies primarily with the server.
+
 Latency: Typically offers lower latency since messages are sent immediately after they become available.
+
 Resource Utilization: This can lead to high resource utilization on the client side, especially if the rate of incoming messages is high.
+
 Examples and Usage:
 RabbitMQ primarily uses a push-based model. 
 It pushes messages to consumers as they arrive in the queue. 
@@ -157,9 +161,13 @@ This model is efficient in scenarios where it is critical to process messages as
 
 ## Pull-Based Model
 Initiation: In a pull-based model, the client (or consumer) requests or polls for messages from the server (or broker) when it is ready to process them.
+
 Control: The control over the message flow is more on the client's side, allowing it to manage its own workload and fetch messages at its own pace.
+
 Latency: This model can have higher latency compared to push-based, as there might be a delay between message availability and consumer polling.
+
 Resource Utilization: Generally leads to more controlled and efficient use of client resources.
+
 Examples and Usage: 
 Kafka uses a pull-based model. 
 Consumers poll Kafka for messages, which allows them to control the rate at which they process messages. 
