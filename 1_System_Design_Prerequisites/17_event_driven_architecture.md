@@ -36,32 +36,88 @@ This non-blocking behavior enables high levels of scalability and flexibility in
 
 
 # Advantages of EDA
-1. Availiblity
-2. Easy Roll-back (Git example?)
-3. Service replacement
-4. Transactional guarantee (atleast 1 or atmost 1)
-5. Intent of the data
+
+## 1. Availability
+EDA often involves components that operate independently, communicating through events. 
+This means if one part of the system fails, the others can continue working. 
+For example, in an e-commerce system, the checkout service might fail, but the browsing and cart services can still function, allowing users to browse products and add them to their carts.
+
+## 2. Easy Roll-back (IMP)
+The concept of "easy roll-back" in the context of Event-Driven Architecture (EDA) refers to the ability to quickly revert or undo changes in the system without causing significant disruption. 
+This is particularly important in systems where updates or changes are frequently made, and there is a need to maintain stability and continuous operation.
+This also helps with debugging and rapid recovery.
+
+Imagine a scenario where a new version of a service is deployed, and it unexpectedly starts to malfunction. 
+In an EDA system, you can quickly revert to the previous version of the service. 
+This roll-back can be done without needing to undo changes across the entire system, minimizing downtime and impact on users. 
+For instance, if an update to a payment processing service introduces bugs, you can roll back to the previous version of just that service, while the rest of the system (like order processing, inventory management, etc.) continues to operate normally.
+Similar to how version control systems like Git allow developers to revert to previous code states, EDA supports reverting service changes. 
+This is because each service in an EDA can be versioned and managed independently, much like code in version control.
+
+## 3. Service Replacement
+EDA allows easy replacement or upgrading of services without affecting the entire system. 
+For example, if you want to replace an inventory management service with a new one, you can do so seamlessly as long as the new service emits and consumes the same events as the old one.
+You can also use the events stored in the previous service to bring the new service up-to-speed on the current state of the system.
+
+## 4. Transactional Guarantee
+EDA can ensure that events are processed at least once or at most once, depending on the system’s requirements. 
+"At least once" means every event will be processed, but there might be duplicates, suitable for scenarios where missing an event is unacceptable. 
+"At most once" means events are processed only once, suitable for cases where duplicating actions is problematic. 
+For example, in a billing system, "at least once" ensures every purchase triggers invoicing, but "at most once" prevents charging a customer twice for the same purchase.
+
+## 5. Intent of the Data
+Events in EDA carry the "intent" or the purpose behind the data change, not just the data itself. 
+This means the system understands why a change occurred, enabling more intelligent and context-aware processing. 
+For instance, an event stating "user added product to cart" carries more intent than just updating the cart's total count, allowing the system to trigger additional processes like recommendations or inventory checks based on the user's action.
 
 
 # Disadvantages
-1. Consistaincy 
+
+## Consistency
+Maintaining data consistency across distributed services can be challenging in EDA. 
+Since events are processed asynchronously, ensuring that all parts of the system are synchronized and reflect the latest state can be difficult, especially in systems requiring strong consistency.
+
+## Not Applicable to Gateways
+EDA is less effective for processes that require immediate, synchronous responses, such as API gateways or direct user interactions, where a request/response model is more appropriate.
+
+## Less Control
+In EDA, the flow of execution is driven by events. 
+This can lead to less control over the process flow, as the system's behavior is determined by the occurrence and handling of events, which can be unpredictable.
+
+## Hidden Flow
+The logic and flow of the application can become hidden or obscured in the interactions between event producers and consumers. 
+This can make it hard to trace the path of execution and understand how data moves through the system.
+
+## Migration
+Migrating an existing system in an EDA to a normal architecture is difficult.
+So, this may cause an architecture lock-in.
 
 
-Events are immutable and can be replayed to allow the systems to take snapshots of their behavior. 
-This allows services to 'self-heal'.
+# How to enable the Roll-back of Events?
 
-A lot of transaction issues are alleviated once idempotency and retrial logic are added to a system. 
-The system can retry messages an infinite number of times to the recipient till there is a message acceptance and acknowledgment from the receiver.
+## Replay All from Start
+One way to return to a previous state is to replay all events from the beginning. 
+This can be time-consuming and resource-intensive, especially for systems with a long history of events.
 
-Event-driven systems are closely related to event sources and CQRS. 
-Greg Young and Martin Fowler have been talking about these systems for a while. 
-Events are persisted in something like a message queue, and hence the responsibility for retrial and persistence is moved to it.
+## Store the Diff/Intermediate Results
+Storing snapshots or intermediate states of the system can help in quickly reverting to a previous state without replaying all events. 
+This approach balances storage cost against recovery speed.
 
-These abstractions enable the programmer to focus on the business logic of a system and add subscribers to events with minimum coupling with other services. 
-Decoupling the system is one of the advantages of event-driven systems.
+## Undo
+Implementing an "undo" functionality by emitting compensating events can revert the effects of previous operations, allowing the system to return to an earlier state.
+E.g., add/sub/mult/division changes.
+However, some events can not be undone easily, like sending an email/text.
 
-One major disadvantage of this system is that it is difficult to reason about the flow of a request. 
-Services can independently register for an event and consume it without the publisher being aware of it.
+## Event Sourcing
+Event sourcing is a related concept where all changes to the application state are stored as a sequence of events. 
+This not only allows for event replay but also for checking out the state of the system at any point in time by replaying events up to that point.
+
+## Compacting or Squashing/Merging Events
+Event Compacting
+In systems with a large number of events, it can be beneficial to compact or squash events over time. This involves merging multiple events into a single event or snapshot that represents the final state after those events have occurred.
+For example, if a record has been updated 100 times, instead of keeping all 100 update events, you could compact these into a single event representing the final state.
+The main purpose of compacting is to reduce the number of events that need to be stored or replayed, making the system more efficient and quicker to restore or analyze.
+This can be achieved through techniques like snapshotting (storing the current state at a point in time) or event merging (combining multiple events into one after every n events, or after t time), which can significantly reduce the load during event replay and state reconstruction.
 
 
 # Extra Information
